@@ -1,0 +1,51 @@
+<div class="cardList">
+  <div *ngFor="let book of storyRec">
+    <mat-card
+      class="cardListItem example-card flex-item mat-elevation-z8"
+      [routerLink]="['/book-detail', book.bookId]"
+      style="cursor: pointer "
+    >
+
+    <mat-card-content>
+        <img
+          src="{{ book.imagesUrl1 }}"
+          alt=""
+          width="78%"
+          height="178px"
+          onError="this.src='../../../assets/images/brokenBook.jpg'"
+          (click)="checkC()"
+        />
+      </mat-card-content>
+      <mat-card-header>
+        <!-- <div  class="example-header-image"></div> -->
+        <mat-card-title *ngIf="book.title != null; else noTitle">
+          <span
+            class="ellipses"
+            tooltip="{{ book.title }}"
+            placement="right"
+            show-delay="500"
+            theme="dark"
+          >
+            {{ book.title | shorten: 15:"..." }}
+          </span>
+        </mat-card-title>
+        <mat-card-subtitle *ngIf="book.author != null; else noSubTitle">
+          <span
+            class="ellipses"
+            tooltip="{{ book.author }}"
+            placement="right"
+            show-delay="500"
+            theme="dark"
+          >
+            {{ book.author | shorten: 10:"..." }}
+          </span>
+        </mat-card-subtitle>
+        <ng-template #noTitle>NA</ng-template>
+        <ng-template #noSubTitle>NA</ng-template>
+      </mat-card-header>
+
+      
+      <mat-card-actions> </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

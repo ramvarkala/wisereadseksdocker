@@ -1,0 +1,105 @@
+.ellipses {
+    white-space: nowrap;
+    width: 8em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    // border: 1px solid #000000;
+    cursor: pointer;
+
+    font-size: 16px;
+    transition: 0.3s;
+    // opacity: 0.5;
+    transition: 0.2s;
+    /* color: black; */
+    font-size: 1.0em;
+    font-weight: 300;
+}
+.btn {
+    font-size: 16px;
+    transition: 0.3s;
+    opacity: 0.5;
+    transition: 0.3s;
+    /* color: black; */
+    font-size: 1.0em;
+    font-weight: 300;
+  }
+//   .ellipses:hover {opacity: 1}
+
+.input-container {
+  // background-color: #EDEDED;
+  // border: 1px solid #DFDFDF;
+  border-radius: 5px;
+  height: 42px;
+  margin-right: 6px;
+}
+
+input[type='file'] {
+  height: 2.5vw;
+  border-radius: 5px;
+  padding: 10px;
+  border: none;
+  border-top-left-radius: 5px;
+  padding: 6px;
+  border: none;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.file-info {
+  font-size: 0.9em;
+}
+
+.bookname{
+  flex: 0 0 20vw;
+  margin-right: 22px;
+}
+
+
+
+thead>tr>th {
+cursor: pointer;
+}
+
+.filter{
+max-width: 300px;
+margin-left: auto;
+padding: 0px;
+margin-bottom: 20px;
+// float: right
+}
+
+
+.my-pagination /deep/ .ngx-pagination .current {
+background: transparent;
+font-weight: 600;
+color: #3bccf6;
+}
+
+.user-status-table{
+box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12);
+padding: 0px 20px;
+}
+
+th{
+font-size: 0.9em;
+font-weight: 600;
+color: #505050;
+}
+
+td,.fa{
+font-size: 0.8em;
+font-weight: 300;
+color: #4b4b4b;
+}
+
+
+
+.no-data{
+text-align: center;
+font-size: 32px;
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%)
+
+}

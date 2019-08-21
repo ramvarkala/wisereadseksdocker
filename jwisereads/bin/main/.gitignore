@@ -1,0 +1,7 @@
+/application-prod.properties
+/application.properties
+/com/
+/db/
+/exception_messages.properties
+/static/
+/validation_messages.properties

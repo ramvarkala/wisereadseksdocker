@@ -1,0 +1,188 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport
+      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+      [mode]="(isHandset$ | async) ? 'over' : 'side'"
+      [opened]="(isHandset$ | async) === false">
+    <mat-toolbar class="main-name">
+            <img src="../../../assets/images/wiseReads.svg" style="width: 300px;height: 44px;    box-shadow: none;cursor: pointer;" routerLink="/">
+    </mat-toolbar>
+    <mat-nav-list class="menu-items">
+      <a mat-list-item style="cursor: pointer" routerLink="/cards" [routerLinkActive]="['is-active']">Dashboard</a>
+      
+      <!-- <a mat-list-item >Recommended Books</a> -->
+      <div  *ngIf="isUser == 4">
+
+            <!-- <a mat-list-item  style="cursor: pointer" routerLink="/book_list" [routerLinkActive]="['is-active']">Book List</a> -->
+
+<!--             <a mat-list-item  style="cursor: pointer" routerLink="/book_list" [routerLinkActive]="['is-active']">Book List</a> -->
+            <a mat-list-item routerLink="/app-book-list-cards" [routerLinkActive]="['is-active']">Book List</a>
+
+            <!-- <a mat-list-item style="cursor: pointer" (click)="userbooks()" [routerLinkActive]="['is-active']">Checkout & Checkin List</a> -->
+
+      </div>
+    
+      <div *ngIf="isUser == 2 || isUser == 1">
+            <a mat-list-item style="cursor: pointer" routerLink="/book_list" [routerLinkActive]="['is-active']">Book List</a>
+            <!-- <a mat-list-item routerLink="/app-book-list-cards" [routerLinkActive]="['is-active']">Book List Cards</a> -->
+
+<!--             <a mat-list-item routerLink="/app-book-list-cards" [routerLinkActive]="['is-active']">Book List</a>
+ -->
+            <a mat-list-item  style="cursor: pointer" routerLink="/inventory" [routerLinkActive]="['is-active']">Inventory</a>
+            
+            <a  mat-list-item style="cursor: pointer" routerLink="/checkout-books" [routerLinkActive]="['is-active']">Checkout & Checkin List</a>
+
+            <!-- <a mat-list-item >Owners</a> -->
+
+            <a mat-list-item routerLink="/app-users-list" [routerLinkActive]="['is-active']">Users</a>
+            <!-- <a mat-list-item routerLink="/app-assign-roles" [routerLinkActive]="['is-active']">Assign Roles</a> -->
+
+            <!-- <a mat-list-item class="mt-4" style="cursor: pointer" routerLink="/add-book" [routerLinkActive]="['is-active']">
+                <button class="add-bookbtn" mat-button mat-raised-button>Add Books</button>
+            </a> -->
+      </div>
+      <mat-expansion-panel  [expanded]="allExpandState" (opened)="allExpandState = true" (closed)="allExpandState = false">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+           My books
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+      
+        <a mat-list-item style="cursor: pointer" [routerLink]="[ '/book-status', userID, 1]" (click)="tabChange(1)" [routerLinkActive]="['is-active']" >To be delivered</a>
+
+        <a mat-list-item  style="cursor: pointer" [routerLink]="[ '/book-status', userID, 2]" (click)="tabChange(2)" [routerLinkActive]="['is-active']" >Delivered</a>
+        
+        <a mat-list-item style="cursor: pointer" [routerLink]="[ '/book-status', userID, 3]" (click)="tabChange(3)" [routerLinkActive]="['is-active']" >Ready to pickup</a>
+      
+      </mat-expansion-panel>
+      <a mat-list-item style="cursor: pointer" [routerLink]="[ '/book-status', userID, 4]" (click)="tabChange(4)" [routerLinkActive]="['is-active']">My History</a>
+     
+        </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <mat-toolbar class="menu-bar">
+            <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" >
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+     
+      <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="10px"
+      fxLayoutGap.xs="0" style="width: 100vw;">
+           
+            <div fxFlex="30%">
+                   
+                <form>
+                    <div>
+                        <div class="search-bar">
+                                <input class="search-input" type="text" placeholder="Search Book / Genre / Author"
+                                    [formControl]="searchTerm" 
+                                    #box (keyup)="onKeyUp(box)"
+                                    [matAutocomplete]="auto" 
+                                >  
+                                <i class="fa fa-search"></i>
+
+                        </div>
+                       
+                        <mat-autocomplete #auto="matAutocomplete">
+                                
+                                <ng-container *ngIf="myBooks.length > 0">
+                                    <mat-option *ngFor="let books of myBooks" [value]="books.value"  [routerLink]="['/book-detail', books.bookId]" (click)="checkC()">
+                                            {{ books.title }}
+                                    </mat-option>
+                                    
+                                </ng-container>
+                                <ng-container *ngIf="myBooks.length == 0 && box.value.length >= 3" >
+                                        <mat-option class="option-result">
+                                           <p class="noresult">No Result Found</p>
+                                        </mat-option> 
+                                </ng-container>
+                                
+                        </mat-autocomplete>
+              
+                    </div>
+                </form>
+            </div>
+
+            <div class="logout-section" fxFlex="70%">
+                    <div class="float-right">
+
+                    <!-- <div class="w3-dropdown-hover w3-right">
+                            <button class="w3-black">{{name}}</button>
+                            <div class="w3-dropdown-content  w3-border" style="right:0">
+                              <a (click)="logOut()" class="w3-bar-item w3-button"><i class="fa fa-sign-out"></i>Logout</a>
+                              <a href="#" class="w3-bar-item w3-button">Link 2</a>
+                              <a href="#" class="w3-bar-item w3-button">Link 3</a>
+                            </div>
+                          </div> -->
+                          <!-- <section class="main">
+                                <div class="wrapper-demo">
+                                    <div id="dd" class="wrapper-dropdown-5" tabindex="1">John Doe
+                                        <ul class="dropdown">
+                                            <li><a href="#"><i class="icon-user"></i>Profile</a></li>
+                                            <li><a href="#"><i class="icon-cog"></i>Settings</a></li>
+                                            <li><a href="#"><i class="icon-remove"></i>Log out</a></li>
+                                        </ul>
+                                    </div>
+                                ​</div>
+                            </section> -->
+                            <!-- <button mat-icon-button [matMenuTriggerFor]="menu" class="menu" aria-label="Example icon-button with a menu">
+                                    <mat-icon>more_vert</mat-icon>
+                                  </button>
+                                  <mat-menu #menu="matMenu">
+                                    <button mat-menu-item>
+                                      <mat-icon>dialpad</mat-icon>
+                                      <span>Redial</span>
+                                    </button>
+                                    <button mat-menu-item disabled>
+                                      <mat-icon>voicemail</mat-icon>
+                                      <span>Check voice mail</span>
+                                    </button>
+                                    <button mat-menu-item>
+                                      <mat-icon>notifications_off</mat-icon>
+                                      <span>Disable alerts</span>
+                                    </button>
+                                  </mat-menu> -->
+                                  <!-- <a class="float-right" (click)="logOut()" mat-list-item routerLinkActive="active" >
+                    <i class="fa fa-sign-out"></i> <span>Logout</span>
+                </a> -->
+
+
+
+                <div class="btn-group" dropdown>
+                    <div id="button-basic" dropdownToggle style="cursor: pointer" class="btn  dropdown-toggle"
+                            aria-controls="dropdown-basic"> 
+                            <!-- <img mat-card-avatar src="../../../assets/images/support.png" alt="img"> -->
+                     <b >{{name}}</b>  <span class="caret"></span>
+                </div>
+                    <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right"
+                    role="menu" aria-labelledby="button-alignment">
+                      <!-- <li role="menuitem"><a class="dropdown-item" href="#">Action</a></li>
+                      <li role="menuitem"><a class="dropdown-item" href="#">Another action</a></li>
+                      <li role="menuitem"><a class="dropdown-item" href="#">Something else here</a></li>
+                      <li class="divider dropdown-divider"></li>
+                      <li role="menuitem"><a class="dropdown-item" href="#">Separated link</a>
+                        <a class="dropdown-item" (click)="logOut()" mat-list-item routerLinkActive="active" >
+                            <i class="fa fa-sign-out"></i> <span>Logout</span>
+                        </a>
+                      </li> -->
+                      <li role="menuitem">
+                      
+                        <a class="dropdown-item" (click)="logOut()" mat-list-item routerLinkActive="active" >
+                            <i class="fa fa-sign-out"></i> <span>Logout</span>
+                        </a>
+                      </li>
+
+                      
+                    </ul>
+                  </div>
+
+
+
+                    </div>
+                
+            </div>
+    </div>
+        </mat-toolbar>
+        <div class="p-5" class="main-container">
+            <router-outlet></router-outlet>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

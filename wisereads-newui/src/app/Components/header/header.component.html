@@ -1,0 +1,52 @@
+<div class="header-section affix">
+  <div class="wisereads-logo">
+    <img
+      src="../../../assets/images/wiseReads.svg"
+      style="width: 300px;height: 44px;    box-shadow: none; cursor: pointer;"
+      routerLink="/"
+    />
+  </div>
+
+  <div class="search-bar-set">
+    <form class="alignSearch">
+      <div>
+        <div class="search-bar">
+          <input
+            class="search-input"
+            type="text"
+            placeholder="Search Book"
+            [formControl]="searchTerm"
+            #box
+            (keyup)="onKeyUp(box)"
+            [matAutocomplete]="auto"
+          />
+          <i class="fa fa-search"></i>
+        </div>
+
+        <mat-autocomplete #auto="matAutocomplete">
+          <ng-container *ngIf="myBooks.length > 0">
+            <mat-option *ngFor="let books of myBooks" [value]="books.value"
+            
+
+                (click)="reload(books.bookId)">
+                {{ books.title }}
+            </mat-option>
+          </ng-container>
+          <ng-container *ngIf="myBooks.length == 0 && box.value.length >= 3">
+            <mat-option class="option-result">
+              <p class="noresult">No Result Found</p>
+            </mat-option>
+          </ng-container>
+        </mat-autocomplete>
+      </div>
+    </form>
+  </div>
+  <div class="link-section">
+    <a routerLink="/register"
+      ><i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp;Register</a
+    >
+    <a routerLink="/login"
+      ><i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;&nbsp;Login</a
+    >
+  </div>
+</div>

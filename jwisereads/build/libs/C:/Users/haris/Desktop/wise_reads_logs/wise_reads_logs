@@ -1,0 +1,43 @@
+"2019-08-21 05:22:00 [main] INFO  c.o.booksapi.BooksApiApplication - Starting BooksApiApplication on ip-172-31-33-194 with PID 3218 (/home/ubuntu/wisereadseksapi/jwisereads/build/libs/books-api-1.0.jar started by root in /home/ubuntu/wisereadseksapi/jwisereads/build/libs)
+""2019-08-21 05:22:00 [main] DEBUG c.o.booksapi.BooksApiApplication - Running with Spring Boot v2.1.5.RELEASE, Spring v5.1.7.RELEASE
+""2019-08-21 05:22:00 [main] INFO  c.o.booksapi.BooksApiApplication - No active profile set, falling back to default profiles: default
+""2019-08-21 05:22:03 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+""2019-08-21 05:22:03 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+""2019-08-21 05:22:03 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.19]
+""2019-08-21 05:22:03 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+""2019-08-21 05:22:03 [main] INFO  o.s.web.context.ContextLoader - Root WebApplicationContext: initialization completed in 2530 ms
+""2019-08-21 05:22:03 [main] ERROR c.o.b.servicesimpl.BooksSerivceImpl - validations Propery file not found ..
+""2019-08-21 05:22:03 [main] ERROR c.o.b.servicesimpl.BooksSerivceImpl - validations Propery file not found ..
+""2019-08-21 05:22:03 [main] DEBUG com.omniwyse.booksapi.db.DBFactory - Books api database has been created
+""2019-08-21 05:22:03 [main] INFO  o.f.c.internal.util.VersionPrinter - Flyway 4.2.0 by Boxfuse
+""2019-08-21 05:22:04 [main] INFO  o.f.c.i.dbsupport.DbSupportFactory - Database: jdbc:mysql://52.66.197.36:3306/qabooksapi?createDatabaseIfNotExist=true (MySQL 5.7)
+""2019-08-21 05:22:04 [main] INFO  o.f.core.internal.command.DbValidate - Successfully validated 5 migrations (execution time 00:00.022s)
+""2019-08-21 05:22:04 [main] INFO  o.f.c.i.m.MetaDataTableImpl - Creating Metadata table: `qabooksapi`.`schema_version`
+""2019-08-21 05:22:04 [main] INFO  o.f.core.internal.command.DbMigrate - Current version of schema `qabooksapi`: << Empty Schema >>
+""2019-08-21 05:22:04 [main] INFO  o.f.core.internal.command.DbMigrate - Migrating schema `qabooksapi` to version 10000 - comboBoxesData
+""2019-08-21 05:22:04 [main] INFO  o.f.core.internal.command.DbMigrate - Migrating schema `qabooksapi` to version 10001 - userDetails
+""2019-08-21 05:22:04 [main] INFO  o.f.core.internal.command.DbMigrate - Migrating schema `qabooksapi` to version 10002 - createBooks
+""2019-08-21 05:22:04 [main] INFO  o.f.core.internal.command.DbMigrate - Migrating schema `qabooksapi` to version 10003 - parameters
+""2019-08-21 05:22:04 [main] INFO  o.f.core.internal.command.DbMigrate - Migrating schema `qabooksapi` to version 10004 - addOwnersTo Users
+""2019-08-21 05:22:05 [main] INFO  o.f.core.internal.command.DbMigrate - Successfully applied 5 migrations to schema `qabooksapi` (execution time 00:00.905s).
+""2019-08-21 05:22:05 [main] DEBUG c.o.b.security.SpringSecurityConfig - **** SpringSecurity config is Triggered ****
+""2019-08-21 05:22:05 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@8f2ef19, org.springframework.security.web.context.SecurityContextPersistenceFilter@2ddc9a9f, org.springframework.security.web.header.HeaderWriterFilter@3646a422, org.springframework.security.web.authentication.logout.LogoutFilter@f78a47e, com.omniwyse.booksapi.filter.JWTAuthenticationFilter@470734c3, com.omniwyse.booksapi.filter.MyAuthenticationFilter@2cf3d63b, com.omniwyse.booksapi.filter.JWTAuthorizationFilter@7674f035, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@4b741d6d, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2a7f1f10, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@740cae06, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@69e153c5, org.springframework.security.web.session.SessionManagementFilter@3e27aa33, org.springframework.security.web.access.ExceptionTranslationFilter@2892d68, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@6e9175d8]
+""2019-08-21 05:22:05 [main] INFO  o.s.s.c.ThreadPoolTaskScheduler - Initializing ExecutorService 'taskScheduler'
+""2019-08-21 05:22:05 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+""2019-08-21 05:22:05 [main] INFO  c.o.booksapi.BooksApiApplication - Started BooksApiApplication in 6.304 seconds (JVM running for 7.033)
+""2019-08-21 06:06:00 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+""2019-08-21 06:06:00 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+""2019-08-21 06:06:00 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 23 ms
+""2019-08-21 07:20:46 [http-nio-8080-exec-9] DEBUG c.o.b.s.MyUserDetailsServiceImpl - Start : com.omniwyse.booksapi.servicesimpl.MyUserDetailsServiceImpl.loadUserByUsername()
+""2019-08-21 07:20:46 [http-nio-8080-exec-9] DEBUG c.o.b.s.MyUserDetailsServiceImpl - Verifying data base user credentials
+""2019-08-21 07:20:46 [http-nio-8080-exec-9] DEBUG c.o.b.r.UserCredentialsRepoImpl - Start : com.omniwyse.booksapi.repoimpl.UserCredentialsRepoImpl.findByUsername()
+""2019-08-21 07:20:46 [http-nio-8080-exec-9] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+""2019-08-21 07:20:46 [http-nio-8080-exec-9] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+""2019-08-21 07:20:46 [http-nio-8080-exec-9] DEBUG c.o.b.r.UserCredentialsRepoImpl - End : com.omniwyse.booksapi.repoimpl.UserCredentialsRepoImpl.findByUsername()
+""2019-08-21 07:20:46 [http-nio-8080-exec-9] DEBUG c.o.b.s.MyUserDetailsServiceImpl - End : com.omniwyse.booksapi.servicesimpl.MyUserDetailsServiceImpl.loadUserByUsername()
+""2019-08-21 07:20:47 [http-nio-8080-exec-1] DEBUG c.o.b.s.MyUserDetailsServiceImpl - Start : com.omniwyse.booksapi.servicesimpl.MyUserDetailsServiceImpl.loadUserByUsername()
+""2019-08-21 07:20:47 [http-nio-8080-exec-1] DEBUG c.o.b.s.MyUserDetailsServiceImpl - Verifying data base user credentials
+""2019-08-21 07:20:47 [http-nio-8080-exec-1] DEBUG c.o.b.r.UserCredentialsRepoImpl - Start : com.omniwyse.booksapi.repoimpl.UserCredentialsRepoImpl.findByUsername()
+""2019-08-21 07:20:47 [http-nio-8080-exec-1] DEBUG c.o.b.r.UserCredentialsRepoImpl - End : com.omniwyse.booksapi.repoimpl.UserCredentialsRepoImpl.findByUsername()
+""2019-08-21 07:20:47 [http-nio-8080-exec-1] DEBUG c.o.b.s.MyUserDetailsServiceImpl - End : com.omniwyse.booksapi.servicesimpl.MyUserDetailsServiceImpl.loadUserByUsername()
+"

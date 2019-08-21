@@ -1,0 +1,670 @@
+<section *ngIf="isHome=='true'">
+
+    <!-- <app-header></app-header> -->
+    <div class="header-section affix">
+        <div class="wisereads-logo">
+          <img
+            src="../../../assets/images/wiseReads.svg"
+            style="width: 300px;height: 44px;    box-shadow: none; cursor: pointer;"
+            routerLink="/"
+          />
+        </div>
+      
+        <div class="search-bar-set">
+          <form class="alignSearch">
+            <div>
+              <div class="search-bar">
+                <input
+                  class="search-input"
+                  type="text"
+                  placeholder="Search Book"
+                  [formControl]="searchTerm"
+                  #box
+                  (keyup)="onKeyUp(box)"
+                  [matAutocomplete]="auto"
+                />
+                <i class="fa fa-search"></i>
+              </div>
+      
+              <mat-autocomplete #auto="matAutocomplete">
+                <ng-container *ngIf="myBooks.length > 0">
+                  <mat-option *ngFor="let books of myBooks" [value]="books.value"
+                  (click)="reload(books.bookId)"
+                      >                   
+                      {{ books.title }}
+                  </mat-option>
+                </ng-container>
+                <ng-container *ngIf="myBooks.length == 0 && box.value.length >= 3">
+                  <mat-option class="option-result">
+                    <p class="noresult">No Result Found</p>
+                  </mat-option>
+                </ng-container>
+              </mat-autocomplete>
+            </div>
+          </form>
+        </div>
+        <div class="link-section">
+          <a routerLink="/register"
+            ><i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp;Register</a
+          >
+          <a routerLink="/login"
+            ><i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;&nbsp;Login</a
+          >
+        </div>
+      </div>
+      
+
+
+
+    <section class="container-fluid mb-5">
+        <!-- <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="medium" color="#e40000" type="ball-clip-rotate"></ngx-spinner> -->
+
+        <div class="book-details" *ngIf="product; else noData">
+          <h5 class="book-title">{{ product.title }}</h5>
+          <div
+            class="book-header"
+            fxLayout
+            fxLayout.xs="column"
+            fxLayoutAlign="left"
+            fxLayoutGap="10px"
+            fxLayoutGap.xs="0"
+          >
+            <div fxFlex="15%">
+              <img class="book-img" src="{{ product.imagesUrl1 }}" />
+            </div>
+            <div>
+              <p class="book-desc">{{ product.bookDescription }}</p>
+            </div>
+          </div>
+    
+          <div
+            class="book-cont"
+            fxLayout
+            fxLayout.xs="column"
+            fxLayoutAlign="left"
+            fxLayoutGap="10px"
+            fxLayoutGap.xs="0"
+          >
+            <div fxFlex="50%">
+              <ul style="list-style: none; ">
+                <li>
+                  Author: <span>{{ product.author }}</span>
+                </li>
+                <li>
+                  Genre: <span>{{ product.genre }}</span>
+                </li>
+                <li>Language: <span>English</span></li>
+                <li>
+                  publisher: <span>{{ product.publisher }}</span>
+                </li>
+                <li>
+                  Edition: <span>{{ product.edition }}</span>
+                </li>
+                <li>
+                  Price: <span>{{ product.bookPrice }}</span>
+                </li>
+              </ul>
+            </div>
+    
+            <div fxFlex="50%">
+              <ul style="list-style: none;">
+                <li>
+                  Rental Value: <span>Rs. {{ product.rentPerDay }}</span>
+                </li>
+                <li *ngIf="isUser == '1' || isUser == '2'">
+                  Owner:
+                  <span
+                    >{{ product.ownerFirstName }}
+                    {{ product.ownerLastName }}</span
+                  >
+                </li>
+                <li>
+                  Publication Date:
+                  <span>{{ product.publicationDate | date }}</span>
+                </li>
+                <li>
+                  No. of pages: <span>{{ product.numberOfPages }}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="book-footer">
+            <button
+              class="checkout"
+              *ngIf="cobC == 'true' && isHome == 'false'"
+              mat-button
+              mat-raised-button
+              (click)="openModal(template)"
+            >
+              CheckOut Now
+            </button>
+            <!-- <button
+              style="float:right;background-color: rgb(68, 66, 66) ;color: #ffffff"
+              *ngIf="cobC == 'true' && isHome == 'false'"
+              mat-button
+              (click)="routerNav()"
+            >
+              Back
+            </button>
+            <button
+              style="float:right;background-color: rgb(68, 66, 66) ;color: #ffffff"
+              *ngIf="id2==1 || id2==2 || id2==3 || id2==4"
+              mat-button
+              (click)="routerNav2()"
+            >
+              Back
+            </button> -->
+            <button
+              class="checkout"
+              *ngIf="isHome == 'true'"
+              mat-button
+              mat-raised-button
+              (click)="navigate()"
+            >
+              CheckOut Now
+            </button>
+            <button
+              style="float:right;background-color: rgb(68, 66, 66) ;color: #ffffff"
+              *ngIf="isHome == 'true'"
+              mat-button
+              routerLink="/"
+            >
+              Back
+            </button>
+    
+            <ng-template #template>
+              <div class="modal-header">
+                <h4 class="modal-title pull-left">CheckOut</h4>
+                <button
+                  type="button"
+                  class="close pull-right"
+                  aria-label="Close"
+                  (click)="modalRef.hide()"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div>
+                  <div class="example-container">
+                    <form name="myForm" [formGroup]="form">
+                      <div>
+                        <input
+                          formControlName="checkoutdata"
+                          placeholder="Checkout Date"
+                          class="form-control"
+                          bsDatepicker
+                        />
+                      </div>
+                      <br />
+                      <div>
+                        <input
+                          formControlName="duedate"
+                          placeholder="Due Date"
+                          class="form-control"
+                          bsDatepicker
+                        />
+                      </div>
+                      <br />
+                      <div>
+                        <input
+                          class="form-control"
+                          formControlName="adv"
+                          placeholder="Adv Amt"
+                        />
+                      </div>
+                      <br />
+                      <!-- <br /> -->
+                      <div >
+                      Rent per day: {{product.rentPerDay}}
+                    </div>
+                    <br>
+                      <button
+                        style="float:right; background-color: #2fc7f5 ;color: #ffffff; margin-left: 5px"
+                        mat-button
+                        color="primary"
+                        (click)="checkoutbook(form.value)"
+                      >
+                        CheckOut
+                      </button>
+    
+                      <button
+                        style="float:right;background-color: rgb(68, 66, 66) ;color: #ffffff"
+                        mat-button
+                        (click)="modalRef.hide()"
+                        type="button"
+                        color="primary"
+                      >
+                        Cancel
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+        <ng-template #noData class="noData">
+            <!-- <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="medium" color="#e40000" type="ball-clip-rotate"></ngx-spinner> -->
+
+          <h4 class="noData">No Data Found</h4>
+            <!-- <img src="../../../assets/images/brokenBook.jpg" height="200px" /> -->
+        </ng-template>
+      </section>
+    
+  <app-footer></app-footer>
+
+  </section>
+  
+
+<section *ngIf="isHome=='false'">
+  <mat-sidenav-container class="sidenav-container">
+      <mat-sidenav
+        #drawer
+        class="sidenav"
+        fixedInViewport
+        [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+        [mode]="(isHandset$ | async) ? 'over' : 'side'"
+        [opened]="(isHandset$ | async) !== true"
+      >
+        <mat-toolbar class="main-name">
+          <img
+            src="../../../assets/images/wiseReads.svg"
+            style="width: 300px;height: 44px;    box-shadow: none; cursor: pointer;"
+            routerLink="/"
+          />
+        </mat-toolbar>
+        <mat-nav-list class="menu-items">
+          <a
+            *ngIf="isHome == 'false'"
+            mat-list-item
+            style="cursor: pointer"
+            routerLink="/cards"
+            [routerLinkActive]="['is-active']"
+            >Dashboard</a
+          >
+    
+          <div *ngIf="isUser == 4">
+            <!-- <a mat-list-item  style="cursor: pointer" routerLink="/book_list" [routerLinkActive]="['is-active']">Book List</a> -->
+            <a
+              mat-list-item
+              routerLink="/app-book-list-cards"
+              [routerLinkActive]="['is-active']"
+              >Book List</a
+            >
+    
+            <!-- <a mat-list-item style="cursor: pointer" (click)="userbooks()" [routerLinkActive]="['is-active']">Checkout & Checkin List</a> -->
+          </div>
+    
+          <div *ngIf="isUser == 2 || isUser == 1">
+            <a
+              mat-list-item
+              style="cursor: pointer"
+              routerLink="/book_list"
+              [routerLinkActive]="['is-active']"
+              >Book List</a
+            >
+            <!-- <a mat-list-item routerLink="/app-book-list-cards" [routerLinkActive]="['is-active']">Book List Cards</a> -->
+    
+            <a
+              mat-list-item
+              style="cursor: pointer"
+              routerLink="/inventory"
+              [routerLinkActive]="['is-active']"
+              >Inventory</a
+            >
+    
+            <a
+              mat-list-item
+              style="cursor: pointer"
+              routerLink="/checkout-books"
+              [routerLinkActive]="['is-active']"
+              >Checkout & Checkin List</a
+            >
+    
+            <a
+              mat-list-item
+              routerLink="/app-users-list"
+              [routerLinkActive]="['is-active']"
+              >Users</a
+            >
+            <!-- <a mat-list-item routerLink="/app-assign-roles" [routerLinkActive]="['is-active']">Assign Roles</a> -->
+          </div>
+          <mat-expansion-panel *ngIf="isHome == 'false'">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                My books
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+    
+            <a
+              mat-list-item
+              style="cursor: pointer"
+              [routerLink]="['/book-status', userID, 1]"
+              [routerLinkActive]="['is-active']"
+              >To be delivered</a
+            >
+    
+            <a
+              mat-list-item
+              style="cursor: pointer"
+              [routerLink]="['/book-status', userID, 2]"
+              [routerLinkActive]="['is-active']"
+              >Delivered</a
+            >
+    
+            <a
+              mat-list-item
+              style="cursor: pointer"
+              [routerLink]="['/book-status', userID, 3]"
+              [routerLinkActive]="['is-active']"
+              >Ready to pickup</a
+            >
+          </mat-expansion-panel>
+          <a
+            *ngIf="isHome == 'false'"
+            mat-list-item
+            style="cursor: pointer"
+            [routerLink]="['/book-status', userID, 4]"
+            [routerLinkActive]="['is-active']"
+            >My History</a
+          >
+        </mat-nav-list>
+      </mat-sidenav>
+      <mat-sidenav-content>
+        <mat-toolbar class="menu-bar">
+          <button
+            type="button"
+            aria-label="Toggle sidenav"
+            mat-icon-button
+            (click)="drawer.toggle()"
+          >
+            <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+          </button>
+    
+          <div
+            fxLayout="row"
+            fxLayout.xs="column"
+            fxLayoutGap="10px"
+            fxLayoutGap.xs="0"
+            style="width: 100vw;"
+          >
+            <div fxFlex="30%" class="search-bar-set">
+              <form >
+                <div>
+                  <div class="search-bar">
+                    <input
+                      class="search-input"
+                      type="text"
+                      placeholder="Search Book / Genre / Author"
+                      [formControl]="searchTerm"
+                      #box
+                      (keyup)="onKeyUp(box)"
+                      [matAutocomplete]="auto"
+                    />
+                    <i class="fa fa-search"></i>
+                  </div>
+    
+                  <mat-autocomplete #auto="matAutocomplete">
+                    <ng-container *ngIf="myBooks.length > 0">
+                      <mat-option
+                        *ngFor="let books of myBooks"
+                        [value]="books.value" 
+                        (click)="reload(books.bookId)"
+                      >                     
+                      {{ books.title }}
+                        </mat-option>
+                    </ng-container>
+                    <ng-container
+                      *ngIf="myBooks.length == 0 && box.value.length >= 3"
+                    >
+                      <mat-option class="option-result">
+                        <p class="noresult">No Result Found</p>
+                      </mat-option>
+                    </ng-container>
+                  </mat-autocomplete>
+                </div>
+              </form>
+            </div>
+    
+            <div class="logout-section" fxFlex="70%">
+              <div class="float-right">
+                <div *ngIf="isHome == 'false'" class="btn-group" dropdown>
+                  <div
+                    id="button-basic"
+                    dropdownToggle
+                    style="cursor: pointer"
+                    class="btn  dropdown-toggle"
+                    aria-controls="dropdown-basic"
+                  >
+                    <!-- <img mat-card-avatar src="../../../assets/images/support.png" alt="img"> -->
+                    <b>{{ name }}</b> <span class="caret"></span>
+                  </div>
+                  <ul
+                    id="dropdown-alignment"
+                    *dropdownMenu
+                    class="dropdown-menu dropdown-menu-right"
+                    role="menu"
+                    aria-labelledby="button-alignment"
+                  >
+                    <li role="menuitem">
+                      <a
+                        class="dropdown-item"
+                        (click)="logOut()"
+                        mat-list-item
+                        routerLinkActive="active"
+                      >
+                        <i class="fa fa-sign-out"></i> <span>Logout</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-toolbar>
+        <div class="p-5" class="main-container">
+          <section class="container-fluid mb-5">
+            <div class="book-details" *ngIf="product">
+              <h5 class="book-title">{{ product.title }}</h5>
+              <div
+                class="book-header"
+                fxLayout
+                fxLayout.xs="column"
+                fxLayoutAlign="left"
+                fxLayoutGap="10px"
+                fxLayoutGap.xs="0"
+              >
+                <div fxFlex="15%">
+                  <img class="book-img" src="{{ product.imagesUrl1 }}" />
+                </div>
+                <div>
+                  <p class="book-desc">{{ product.bookDescription }}</p>
+                </div>
+              </div>
+    
+              <div
+                class="book-cont"
+                fxLayout
+                fxLayout.xs="column"
+                fxLayoutAlign="left"
+                fxLayoutGap="10px"
+                fxLayoutGap.xs="0"
+              >
+                <div fxFlex="50%">
+                  <ul style="list-style: none; ">
+                    <li>
+                      Author: <span>{{ product.author }}</span>
+                    </li>
+                    <li>
+                      Genre: <span>{{ product.genre }}</span>
+                    </li>
+                    <li>Language: <span>English</span></li>
+                    <li>
+                      publisher: <span>{{ product.publisher }}</span>
+                    </li>
+                    <li>
+                      Edition: <span>{{ product.edition }}</span>
+                    </li>
+                    <li>
+                      Price: <span>{{ product.bookPrice }}</span>
+                    </li>
+                  </ul>
+                </div>
+    
+                <div fxFlex="50%">
+                  <ul style="list-style: none;">
+                    <li>
+                      Rental Value: <span>Rs. {{ product.rentPerDay }}</span>
+                    </li>
+                    <li *ngIf="isUser == '1' || isUser == '2'">
+                      Owner:
+                      <span
+                        >{{ product.ownerFirstName }}
+                        {{ product.ownerLastName }}</span
+                      >
+                    </li>
+                    <li>
+                      Publication Date:
+                      <span>{{ product.publicationDate | date }}</span>
+                    </li>
+                    <li>
+                      No. of pages: <span>{{ product.numberOfPages }}</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="book-footer">
+                <button
+                  class="checkout"
+                  *ngIf="cobC == 'true' && isHome == 'false'"
+                  mat-button
+                  mat-raised-button
+                  (click)="openModal(template)"
+                >
+                  CheckOut Now
+                </button>
+                <!-- <button
+                  style="float:right;background-color: rgb(68, 66, 66) ;color: #ffffff"
+                  *ngIf="cobC == 'true' && isHome == 'false'"
+                  mat-button
+                  (click)="routerNav()"
+                >
+                  Back
+                </button>
+                <button
+                  style="float:right;background-color: rgb(68, 66, 66) ;color: #ffffff"
+                  *ngIf="id2==1 || id2==2 || id2==3 || id2==4"
+                  mat-button
+                  (click)="routerNav2()"
+                >
+                  Back
+                </button> -->
+                <button
+                  class="checkout"
+                  *ngIf="isHome == 'true'"
+                  mat-button
+                  mat-raised-button
+                  (click)="navigate()"
+                >
+                  CheckOut Now
+                </button>
+                <!-- <button
+                  style="float:right;background-color: rgb(68, 66, 66) ;color: #ffffff"
+                  *ngIf="isHome == 'true' && cobC == 'true'"
+                  mat-button
+                  routerLink="/"
+                >
+                  Back
+                </button> -->
+    
+                <ng-template #template>
+                  <div class="modal-header">
+                    <h4 class="modal-title pull-left">CheckOut</h4>
+                    <div style="padding-top: 7px;padding-left: 46%;">
+                        Rent per day: {{product.rentPerDay}}
+                      </div>
+                    <button
+                      type="button"
+                      class="close pull-right"
+                      aria-label="Close"
+                      (click)="modalRef.hide()"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <div>
+                      <div class="example-container">
+                        <form name="myForm" [formGroup]="form">
+                          <div>
+                            <input
+                              formControlName="checkoutdata"
+                              placeholder="Checkout Date"
+                              class="form-control"
+                              bsDatepicker
+                            />
+                          </div>
+                          <br />
+                          <div>
+                            <input
+                              formControlName="duedate"
+                              placeholder="Due Date"
+                              class="form-control"
+                              bsDatepicker
+                            />
+                          </div>
+                          <br />
+                          <div>
+                            <input
+                              class="form-control"
+                              formControlName="adv"
+                              placeholder="Adv Amt"
+                            />
+                          </div>
+                          <br />
+                          <!-- <br /> -->
+                          
+                        <br>
+                          <button
+                          *ngIf="form.valid"
+                            style="float:right; background-color: #2fc7f5 ;color: #ffffff; margin-left: 5px"
+                            mat-button
+                            color="primary"
+                            (click)="checkoutbook(form.value)"
+                            [disabled]="!form.valid"
+                          >
+                            CheckOut
+                          </button>
+                          <button
+                          *ngIf="!form.valid"
+                          style="float:right; background-color: #c5ebf7 ;color: #ffffff; margin-left: 5px"
+                          mat-button
+                          color="primary"
+                          (click)="checkoutbook(form.value)"
+                          [disabled]="!form.valid"
+                        >
+                          CheckOut
+                        </button>
+                          <button
+                            style="float:right;background-color: rgb(68, 66, 66) ;color: #ffffff"
+                            mat-button
+                            (click)="modalRef.hide();createForm()"
+                            type="button"
+                            color="primary"
+                          >
+                            Cancel
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+          </section>
+        </div>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </section>
+

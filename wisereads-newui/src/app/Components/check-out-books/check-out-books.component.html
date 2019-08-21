@@ -1,0 +1,612 @@
+<div
+  fxLayout
+  fxLayout.xs="column"
+  fxLayoutAlign="left"
+  fxLayoutGap="10px"
+  fxLayoutGap.xs="0"
+>
+  <div class="item item-1" fxFlex="50%">
+    <img class="dashboard-img" src="../../assets/images/metrics (1).png" />
+    <h1>Checkout-Checkin List</h1>
+  </div>
+  <mat-select
+    placeholder="All"
+    name="checked_status_id"
+    id="checked_status_id"
+    class="fliter-box"
+    [value]="cId"
+  >
+  <mat-option (click)="loadAll()">All</mat-option>
+
+    <mat-option
+      *ngFor="let id of comboBoxesDataCheckedStatus"
+      [value]="id.checked_status_id"
+      (click)="applyFilter(id.checked_status_id)"
+      >{{ id.checked_status }}
+    </mat-option>
+  </mat-select>
+</div>
+
+<div class="example-container mat-elevation-z8">
+  <mat-table #table [dataSource]="dataSource" [class.isMobile]="isMobile">
+    <ng-container matColumnDef="invId">
+      <mat-header-cell *matHeaderCellDef> Inv ID </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        {{ element.inventoryId }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="orderId">
+      <mat-header-cell *matHeaderCellDef> Order ID</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        {{ element.orderId }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="bookName">
+      <mat-header-cell *matHeaderCellDef> Book Name </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <span
+          class="ellipses"
+          tooltip="{{ element.title }}"
+          placement="right"
+          show-delay="500"
+          theme="dark"
+        >
+          <a [routerLink]="['/book-detail', element.bookId]">
+            {{ element.title | shorten: 50:"..." }}
+          </a>
+        </span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="userName">
+      <mat-header-cell *matHeaderCellDef> User Name </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <ng-template #UserContent>
+          User Id: <b>{{ element.userId }}</b> <br />
+          Phone: <b>{{ element.contactNumber }}</b> <br />
+          Email:<b>{{ element.userEmail }}</b>
+        </ng-template>
+
+        <span
+          [tooltip]="UserContent"
+          placement="right"
+          show-delay="500"
+          offset="4"
+          content-type="template"
+        >
+          <a> {{ element.userFirstName }} {{ element.userLastName }} </a>
+        </span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="checkOutDate">
+      <mat-header-cell *matHeaderCellDef> CheckOut Date</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        {{ element.checkedOutDate | date }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="dueDate">
+      <mat-header-cell *matHeaderCellDef> Due Date </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <span *ngIf="element.expReturnDate != null">{{
+          element.expReturnDate | date
+        }}</span>
+        <span *ngIf="element.expReturnDate == null"> -</span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="dueAmt">
+      <mat-header-cell *matHeaderCellDef> Due Amt </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        {{ element.dueAmount }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="returnDate">
+      <mat-header-cell *matHeaderCellDef> Return Date </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <span *ngIf="element.returnedDate != null"
+          >{{ element.returnedDate | date: "dd/MM/yyyy" }}
+        </span>
+        <span *ngIf="element.returnedDate == null"> -</span>
+      </mat-cell>
+    </ng-container>
+
+    <!-- <ng-container matColumnDef="status">
+      <mat-header-cell *matHeaderCellDef> Status</mat-header-cell>
+      <mat-cell *matCellDef="let element; let i = index">
+        <mat-select
+          [disabled]="element.checkedItatusId == '4'"
+          name="checked_status_id"
+          id="checked_status_id"
+          [value]="element.checkedItatusId"
+        >
+          <mat-option
+            [disabled]="id.checked_status_id <= element.checkedItatusId"
+            *ngFor="let id of comboBoxesDataCheckedStatus"
+            [value]="id.checked_status_id"
+            (click)="checkedStatusId($event,id, i)"
+            
+            >{{ id.checked_status }}
+          </mat-option>
+        </mat-select> -->
+
+        <!-- <mat-form-field> -->
+        <!-- <select style="width: 108px;" matNativeControl [disabled]="element.checkedItatusId=='4'" name="checked_status_id" id="checked_status_id"  required>
+    <option  *ngFor="let id of comboBoxesDataCheckedStatus" selected="id.checked_status_id" [value]="id.checked_status_id" (onSelectionChange)="checkedStatusId($event,id)">{{id.checked_status}}</option>
+  </select> -->
+        <!-- 
+
+  <select matNativeControl [(ngModel)]="selectedCar" name="car">
+      <option value="" selected></option>
+      <option *ngFor="let car of cars" [value]="car.value">
+        {{car.viewValue}}
+      </option>
+    </select> -->
+        <!-- </mat-form-field> -->
+
+        <!-- <h4>Basic mat-select</h4>
+<mat-form-field>
+  <mat-label>Favorite food</mat-label>
+  <mat-select>
+    <mat-option *ngFor="let food of foods" [value]="food.value">
+      {{food.viewValue}}
+    </mat-option>
+  </mat-select>
+</mat-form-field> -->
+      <!-- </mat-cell>
+    </ng-container> -->
+
+
+    <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef> Status</mat-header-cell>
+        <mat-cell *matCellDef="let element; let i = index">
+          <!-- <mat-select
+            [disabled]="element.checkedItatusId == '4'"
+            name="checked_status_id"
+            id="checked_status_id"
+            [value]="element.checkedItatusId"
+          >
+            <mat-option
+              [disabled]="id.checked_status_id <= element.checkedItatusId"
+              *ngFor="let id of comboBoxesDataCheckedStatus"
+              [value]="id.checked_status_id"
+              (click)="checkedStatusId($event,id, i)"
+              
+              >{{ id.checked_status }}
+            </mat-option>
+          </mat-select> -->
+          {{element.checkedStatus}}
+
+          <!-- <mat-chip-list aria-label="">
+
+              <mat-chip *ngIf="element.checkedItatusId=='1'" style="background-color: rgb(68, 155, 226)" >{{element.checkedStatus}}</mat-chip>
+              <mat-chip *ngIf="element.checkedItatusId=='2'" style="background-color: yellow" >{{element.checkedStatus}}</mat-chip>
+              <mat-chip *ngIf="element.checkedItatusId=='3'" style="background-color: steelblue" >{{element.checkedStatus}}</mat-chip>
+              <mat-chip *ngIf="element.checkedItatusId=='4'" style="background-color: green" >{{element.checkedStatus}}</mat-chip>
+    
+            </mat-chip-list> -->
+        </mat-cell>
+      </ng-container>
+
+    <!-- <ng-container matColumnDef="totalAmtPaid">
+      <mat-header-cell *matHeaderCellDef> Total Amt paid </mat-header-cell>
+      <mat-cell *matCellDef="let element; let i = index">
+        <ng-container>
+          <mat-form-field
+            *ngIf="
+              this.checkOut.checkedItatusId == '4' && this.selectIndex == i
+            "
+          >
+            <input
+              [disabled]="element.checkedItatusId == '4' || disableSubmit"
+              matInput
+              type="text"
+              name="amountPaid"
+              [(ngModel)]="amountPaid[i]"
+              pattern="^[a-zA-Z0-9- ]{1,30}$"
+              required
+              maxlength="6"
+              (keydown)="check($event)"
+            />
+          </mat-form-field>
+        </ng-container>
+        <ng-container *ngIf="element.checkedItatusId == '4'">
+          <span style="padding-left: 40px" *ngIf="element.amountPaid != null">{{
+            element.amountPaid
+          }}</span>
+        </ng-container>
+        <ng-container *ngIf="element.checkedItatusId == '4'">
+          <span style="padding-left: 40px" *ngIf="element.amountPaid == null"
+            >0</span
+          >
+        </ng-container>
+      </mat-cell>
+    </ng-container> -->
+
+
+    <ng-container matColumnDef="totalAmtPaid">
+        <mat-header-cell *matHeaderCellDef> Total Amt paid </mat-header-cell>
+        <mat-cell *matCellDef="let element; let i = index">
+          <ng-container>
+            <mat-form-field
+              *ngIf="
+                element.checkedItatusId=='3'
+              "
+            >
+              <input
+              placeholder="Enter amount"
+                [disabled]="element.checkedItatusId == '4' "
+                matInput
+                type="text"
+                name="amountPaid"
+                [(ngModel)]="amountPaid[i]"
+                pattern="^[a-zA-Z0-9- ]{1,30}$"
+                required
+                maxlength="6"
+                (keydown)="check($event)"
+              />
+            </mat-form-field>
+          </ng-container>
+          <ng-container *ngIf="element.checkedItatusId == '4';else dash">
+            <span style="padding-left: 40px" *ngIf="element.amountPaid != null">{{
+              element.amountPaid
+            }}</span>
+            <!-- <span style="padding-left: 40px" *ngIf="element.amountPaid == null"
+              >0</span
+            > -->
+          </ng-container>
+          <ng-container *ngIf="element.checkedItatusId == '4'">
+            <span style="padding-left: 40px" *ngIf="element.amountPaid == null"
+              >0</span
+            >
+          </ng-container>
+          <ng-template #dash>
+            <span style="padding-left: 40px">-</span>
+          </ng-template>
+        </mat-cell>
+      </ng-container>
+
+    <!-- <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+      <mat-cell *matCellDef="let element; let i = index">
+        <button
+          [disabled]="
+            element.amountPaid ||
+            element.checkedItatusId == '4' ||
+            (!this.checkOut.checkedItatusId || this.selectIndex != i) ||
+            disableButton || disableSubmit
+          "
+          class="edit-button"
+          (click)="submit(i, element)"
+          mat-button
+          mat-raised-button
+        >
+          Submit
+        </button> -->
+        <!-- <button *ngIf="this.checkOut.checkedItatusId" [disabled]="this.checkOut.checkedItatusId"  class="edit-button" (click)="submit(i,element)" mat-button mat-raised-button>2</button> -->
+        <!-- <button *ngIf="element.checkedItatusId=='3'" [disabled]="(!this.checkOut.checkedItatusId || this.selectIndex!=i)"  class="edit-button" (click)="submit(i,element)" mat-button mat-raised-button>3</button>
+        <button *ngIf="element.checkedItatusId=='2'"  [disabled]="(!this.checkOut.checkedItatusId || this.selectIndex!=i)"  class="edit-button" (click)="submit(i,element)" mat-button mat-raised-button>2</button>
+        <button *ngIf="element.checkedItatusId=='1'"  [disabled]="(!this.checkOut.checkedItatusId || this.selectIndex!=i)"  class="edit-button" (click)="submit(i,element)" mat-button mat-raised-button>1</button> -->
+      <!-- </mat-cell>
+    </ng-container> -->
+
+
+    <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let element; let i = index">
+          <!-- <button
+            [disabled]="
+              element.amountPaid ||
+              element.checkedItatusId == '4' ||
+              (!this.checkOut.checkedItatusId || this.selectIndex != i) ||
+              disableButton || disableSubmit
+            "
+            class="edit-button"
+            (click)="submit(i, element)"
+            mat-button
+            mat-raised-button
+          >
+            Submit
+          </button> -->
+          <button class="edit-btn"
+          (click)="submit(i, element)"
+          mat-button
+          mat-raised-button 
+          *ngIf="element.checkedItatusId=='1'"
+          >Check Out
+        </button>
+          <!-- <button class="edit-btn"
+          [disabled]="(element.checkedItatusId=='2')"
+          (click)="submit(i, element)"
+          mat-button
+          mat-raised-button
+          *ngIf="element.checkedItatusId=='2'"
+          >Ready to Pickup
+        </button> -->
+          <button class="edit-btn"
+          [disabled]="!amountPaid[i]"
+          (click)="submit(i, element)"
+          mat-button
+          mat-raised-button
+          *ngIf="element.checkedItatusId=='3'"
+          >CheckIn
+        </button>
+        <!-- <button class="edit-btn"
+        [disabled]="element.checkedItatusId=='4'"
+          (click)="submit(i, element)"
+          mat-button
+          mat-raised-button
+          *ngIf="element.checkedItatusId=='4'"
+          >CheckIn
+        </button> -->
+
+        </mat-cell>
+      </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+
+  <mat-paginator
+    #paginator
+    [pageSize]="[6]"
+    showFirstLastButtons
+  ></mat-paginator>
+</div>
+
+<!-- TABLE -->
+
+<!-- <section>
+   
+        <div fxLayout fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0">
+            <div class="item item-1" fxFlex="50%">
+              <img class="dashboard-img" src="../../assets/images/metrics (1).png">
+              <h1>Checkout Books</h1>
+            </div>
+            <mat-select  placeholder="Select Status" name="checked_status_id" id="checked_status_id" class="fliter-box">
+                <mat-option *ngFor="let id of comboBoxesDataCheckedStatus" [value]="id.checked_status_id" (click)="applyFilter(id.checked_status_id)">{{id.checked_status}}
+                </mat-option>
+            </mat-select>
+          </div>
+    <div class="table-responsive user-status-table mb-5">
+      <table class="table ">
+        <thead>
+            <tr>
+                <th  style="width:6%" [class.active]="order === 'id'" (click)="setOrder('id')">
+                    Inv ID 
+                </th>
+                <th style="width:13%" [class.active]="order === 'author'" (click)="setOrder('author')">
+                    Order Id 
+                </th>
+                <th style="width:25%" [class.active]="order === 'title'" (click)="setOrder('title')"
+                    >Book Name
+                </th>
+                
+                <th  style="width:13%" [class.active]="order === 'genre'" (click)="setOrder('genre')">
+                    User Name 
+                </th>
+                <th class="text-center" style="width:14%" [class.active]="order === 'owner'" (click)="setOrder('owner')"  >
+                        CheckOut Date
+                </th>
+                <th class="text-center" style="width:14%" [class.active]="order === 'availability'" (click)="setOrder('availability')" >
+                    Due Date 
+                </th>
+                <th class="text-center" [class.active]="order === 'rent'" (click)="setOrder('rent')">
+                    Due Amt 
+                </th>
+                <th class="text-center" [class.active]="order === 'rent'" (click)="setOrder('rent')" >
+                    Return Date 
+                </th>
+                <th class="text-center" [class.active]="order === 'rent'" (click)="setOrder('rent')" >
+                    Status 
+                </th>
+
+                <th class="text-center" [class.active]="order === 'rent'" (click)="setOrder('rent')" >
+                    Total Amt Paid 
+                </th>
+                <th class="text-center"  >
+                        Action 
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let data of ELEMENT_DATA | orderBy: order:reverse:'case-insensitive'  | filter:filter | paginate: { itemsPerPage: 4, currentPage: p }; let i = index">
+                <td >{{data.inventoryId}}</td>
+                <td >{{data.orderId}}</td>
+
+                <td >
+                        <span class="ellipses" tooltip="{{data.title}}" placement="right" show-delay="500" theme="dark" >
+                            <a [routerLink]="['/book-detail', data.bookId]">
+                              {{data.title | shorten: 18 : '...'}}
+                          </a>
+                        </span>
+                </td>
+                <td *ngIf="data.userFirstName != null; else nodata">
+                    <ng-template #UserContent>
+                        User Id: <b>{{data.userId}}</b> <br> Phone: <b>{{data.contactNumber}}</b> <br> Email:<b>{{data.userEmail}}</b>
+                      </ng-template>
+                       
+                      <span [tooltip]="UserContent" placement="right" show-delay="500" offset="4" content-type="template" >
+                          <a> {{data.userFirstName}} {{data.userLastName}} </a>
+                      </span>
+                  </td>
+                <td *ngIf="data.checkedOutDate != null; else nodata">{{data.checkedOutDate| date}}</td>
+                <td *ngIf="data.expReturnDate != null; else nodata">{{data.expReturnDate| date}}</td>
+                <td class="text-center"  >
+                    <ng-container  *ngIf="data.totalAmount != null; else nodata">
+                            {{data.totalAmount}}
+                    </ng-container>
+                </td>
+                <td class="text-center"   >
+                        <ng-container  *ngIf="data.returnedDate != null; else nodata">                                   
+                                {{data.returnedDate| date}}
+                        </ng-container>                        
+                </td>
+                <ng-template #nodata>
+                    <p class="text-center"> - </p>
+                </ng-template>
+                <td class="text-center" > -->
+<!-- <mat-select [disabled]="data.checkedItatusId=='4'" name="checked_status_id" id="checked_status_id" [value]="data.checkedItatusId">
+                        <mat-option *ngFor="let id of comboBoxesDataCheckedStatus" [value]="id.checked_status_id" (onSelectionChange)="checkedStatusId($event,id)" >{{id.checked_status}}
+                        </mat-option>
+                      </mat-select>
+                      <select style="width: 90px;" matNativeControl [disabled]="data.checkedItatusId=='4'" name="checked_status_id" id="checked_status_id"  required>
+                          <option  *ngFor="let id of comboBoxesDataCheckedStatus" selected="id.checked_status_id" [value]="id.checked_status_id" (onSelectionChange)="checkedStatusId($event,id)">{{id.checked_status}}</option>
+                        </select> -->
+<!-- <mat-select style="width: 100px" [disabled]="data.checkedItatusId=='4'" name="checked_status_id" id="checked_status_id" [value]="data.checkedItatusId">
+                            <mat-option *ngFor="let id of comboBoxesDataCheckedStatus" [value]="id.checked_status_id" (onSelectionChange)="checkedStatusId($event,id)" >{{id.checked_status}}
+                            </mat-option>
+                          </mat-select>
+                </td>
+                <td class="text-center"  >
+                    <ng-container  *ngIf="checkOut.checkedItatusId=='4'" >
+                          <div *ngIf="data.checkedItatusId!='4'">
+                            <input  [disabled] ="data.amountPaid && data.checkedItatusId=='4'" style="text-align: left;width: 68px;" matInput type="text" name="amountPaid" [(ngModel)]="amountPaid[i]"
+                              pattern="^[a-zA-Z0-9- ]{1,30}$" required maxlength="6" (keydown)="check($event)" />
+                      </div>
+                    </ng-container>
+                   <ng-container *ngIf="data.checkedItatusId=='4'">
+                    <span *ngIf='data.amountPaid!=null'>{{data.amountPaid}}</span> 
+                   </ng-container>
+                   <ng-container *ngIf="data.checkedItatusId=='4' && amountPaid==null">
+                        <span *ngIf='data.amountPaid==null'></span>
+                     </ng-container>
+                </td>
+
+                <td class="text-center"  >
+                        <button [disabled]="data.amountPaid || data.checkedItatusId=='4'"  class="edit-button" (click)="submit(i,data)" mat-button mat-raised-button>Submit</button>
+                </td>
+            </tr>
+        </tbody>
+      </table>
+      <pagination-controls  class="my-pagination" (pageChange)="p = $event"  maxSize="9"
+                            directionLinks="true"
+                            autoHide="true"
+                            responsive="true"
+                            previousLabel="Previous"
+                            nextLabel="Next"
+                            screenReaderPaginationLabel="Pagination"
+                            screenReaderPageLabel="page"
+     ></pagination-controls>
+    </div>
+</section> -->
+
+<!-- <--   Ngx Data Table -->
+<!-- <div
+  fxLayout
+  fxLayout.xs="column"
+  fxLayoutAlign="left"
+  fxLayoutGap="10px"
+  fxLayoutGap.xs="0"
+>
+  <div class="item item-1" fxFlex="50%">
+    <img class="dashboard-img" src="../../assets/images/metrics (1).png" />
+    <h1>Checkout Books</h1>
+  </div>
+  <mat-select
+    placeholder="Select Status"
+    name="checked_status_id"
+    id="checked_status_id"
+    class="fliter-box"
+  >
+    <mat-option
+      *ngFor="let id of comboBoxesDataCheckedStatus"
+      [value]="id.checked_status_id"
+      (click)="applyFilter(id.checked_status_id)"
+      >{{ id.checked_status }}
+    </mat-option>
+  </mat-select>
+</div>
+<ngx-datatable
+  class="material striped"
+  [rows]="rows"
+  [columns]="columns"
+  [columnMode]="'force'"
+  [headerHeight]="50"
+  [footerHeight]="50"
+  [rowHeight]="50"
+  [limit]="5"
+  [scrollbarH]="true"
+  >>
+  <ngx-datatable-column name="invId">
+    <ng-template let-row="row" ngx-datatable-cell-template>
+      {{ row.inventoryId }}
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="orderId">
+    <ng-template let-row="row" ngx-datatable-cell-template>
+      {{ row.orderId }}
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="bookName">
+    <ng-template let-row="row" ngx-datatable-cell-template>
+      <div class="ellipses" title="{{ row.title }}">
+        {{ row.title }}
+      </div>
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="userName">
+    <ng-template let-row="row" ngx-datatable-cell-template>
+      <div class="ellipses" title="{{ row.orderId }}">
+        {{ row.orderId }}
+      </div>
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="checkOutDate">
+    <ng-template let-row="row" ngx-datatable-cell-template>
+      {{ row.checkedOutDate | date: "dd/MM/yyyy" }}
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="DueDate">
+    <ng-template let-row="row" ngx-datatable-cell-template>
+      <span *ngIf="row.expReturnDate != null">{{
+        row.expReturnDate | date: "dd/MM/yyyy"
+      }}</span>
+      <span *ngIf="row.expReturnDate == null"> -</span>
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="dueAmt">
+    <ng-template let-row="row" ngx-datatable-cell-template>
+      {{ row.totalAmount }}
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="returnDate">
+    <ng-template let-row="row" ngx-datatable-cell-template>
+      <span *ngIf="row.returnedDate != null"
+        >{{ row.returnedDate | date: "dd/MM/yyyy" }}
+      </span>
+      <span *ngIf="row.returnedDate == null"> -</span>
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="status">
+    <ng-template let-row="row" ngx-datatable-cell-template>
+      <mat-select [disabled]="row.checkedItatusId=='4'" name="checked_status_id" id="checked_status_id" [value]="row.checkedItatusId">
+          <mat-option *ngFor="let id of comboBoxesDataCheckedStatus" [value]="id.checked_status_id" (onSelectionChange)="checkedStatusId($event,id)" >{{id.checked_status}}
+          </mat-option>
+        </mat-select>
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="totalAmtPaid">
+    <ng-template let-row="row" ngx-datatable-cell-template>
+        <ng-container *ngIf="row.checkedItatusId=='4'">
+            <mat-form-field class="mff">
+                <input [disabled] ="row.amountPaid && row.checkedItatusId=='4'" style="text-align: left;" matInput type="text" name="amountPaid" [(ngModel)]="amountPaid[i]"
+                  pattern="^[a-zA-Z0-9- ]{1,30}$" required maxlength="6" (keydown)="check($event)" />
+            </mat-form-field>
+        </ng-container>
+       <ng-container *ngIf="row.checkedItatusId=='4'">
+        <span *ngIf='row.amountPaid!=null'>{{row.amountPaid}}</span> 
+          <span *ngIf='row.amountPaid==null'>-</span>
+       </ng-container>    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="actions">
+    <ng-template let-row="row" ngx-datatable-cell-template>
+        <button [disabled]="row.amountPaid || row.checkedItatusId=='4'"  class="edit-button" (click)="submit(i,row)" >Submit</button>
+    </ng-template>
+  </ngx-datatable-column>
+</ngx-datatable> -->

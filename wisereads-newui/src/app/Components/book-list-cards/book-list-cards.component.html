@@ -1,0 +1,181 @@
+<section *ngIf="ELEMENT_DATA.length > 0; else noData">
+  <div class="row">
+    <div class="item item-1 col-lg-3 col-md-3 col-sm-12">
+      <img class="dashboard-img" src="../../../assets/images/metrics (1).png" />
+      <h1>Book List</h1>
+    </div>
+
+    <div
+      class="item item-2 col-lg-9 col-md-9 col-sm-12"
+      *ngIf="isUser == 2 || isUser == 1"
+    >
+      <div class="input-container">
+        <input type="file" id="real-input" (change)="onSelectFile($event)" />
+      </div>
+      <button
+        class="mr-2 action-button"
+        (click)="onUpload()"
+        mat-button
+        mat-raised-button
+      >
+        Import Books
+      </button>
+      <button
+        class="action-button"
+        routerLink="/add-book"
+        mat-button
+        mat-raised-button
+      >
+        Add Books
+      </button>
+    </div>
+    <!-- <div class="filter col-lg-9 col-md-9 col-sm-12" *ngIf="isUser == 3 ||  isUser == 4">
+                    <input class="form-control" placeholder="filter" type="text" name="search" [(ngModel)]="filter">      
+            </div> -->
+  </div>
+  <h3 class="rec_heading">
+    Comic Books
+    <a style="margin-left: 82.5%;" routerLink="/app-comic-books-view-all"
+      >View All</a
+    >
+  </h3>
+  <div style="margin-left: -19px">
+    <ngx-slick-carousel
+      class="carousel"
+      #slickModal="slick-carousel"
+      [config]="slideConfig"
+      (init)="slickInit($event)"
+      (breakpoint)="breakpoint($event)"
+      (afterChange)="afterChange($event)"
+      (beforeChange)="beforeChange($event)"
+    >
+      <div ngxSlickItem *ngFor="let slide of comicsRec">
+        <!-- <div class="card"> -->
+        <div class="flex-item" *ngIf="slide.imagesUrl1 != ''; else default">
+          <img
+            src="{{ slide.imagesUrl1 }} "
+            alt=""
+            height="200px"
+            [routerLink]="['/book-detail', slide.bookId]"
+            style="cursor: pointer "
+            onError="this.src='../../../assets/images/brokenBook.jpg'"
+            (click)="checkC()"
+          />
+        </div>
+        <ng-template #default>
+          <img src="../../../assets/images/default-book.png" height="200px" />
+        </ng-template>
+        <!-- </div> -->
+      </div>
+    </ngx-slick-carousel>
+  </div>
+  <br /><br />
+
+  <h3 class="rec_heading">
+    Fiction Books
+    <a style="margin-left: 82.5%;" routerLink="/app-fiction-books-view-all"
+      >View All</a
+    >
+  </h3>
+  <div style="margin-left: -19px">
+    <ngx-slick-carousel
+      class="carousel"
+      #slickModal="slick-carousel"
+      [config]="slideConfig"
+      (init)="slickInit($event)"
+      (breakpoint)="breakpoint($event)"
+      (afterChange)="afterChange($event)"
+      (beforeChange)="beforeChange($event)"
+    >
+      <div ngxSlickItem *ngFor="let slide of ficRec">
+        <!-- <div class="card"> -->
+        <div class="flex-item" *ngIf="slide.imagesUrl1 != ''; else default">
+          <img
+            src="{{ slide.imagesUrl1 }} "
+            alt=""
+            height="200px"
+            [routerLink]="['/book-detail', slide.bookId]"
+            style="cursor: pointer "
+            onError="this.src='../../../assets/images/brokenBook.jpg'"
+            (click)="checkC()"
+          />
+        </div>
+        <ng-template #default>
+          <img src="../../../assets/images/default-book.png" height="200px" />
+        </ng-template>
+        <!-- </div> -->
+      </div>
+    </ngx-slick-carousel>
+  </div>
+
+  <br /><br />
+
+  <div>
+    <h3 class="rec_heading">
+      Story Books
+      <a style="margin-left: 83.5%;" routerLink="/app-story-books-view-all"
+        >View All</a
+      >
+    </h3>
+  </div>
+  <div style="margin-left: -19px">
+    <ngx-slick-carousel
+      class="carousel"
+      #slickModal="slick-carousel"
+      [config]="slideConfig"
+      (init)="slickInit($event)"
+      (breakpoint)="breakpoint($event)"
+      (afterChange)="afterChange($event)"
+      (beforeChange)="beforeChange($event)"
+    >
+      <div ngxSlickItem *ngFor="let slide of storyRec">
+        <!-- <div class="card"> -->
+        <div class="flex-item" *ngIf="slide.imagesUrl1 != ''; else default">
+          <img
+            src="{{ slide.imagesUrl1 }} "
+            alt=""
+            height="200px"
+            [routerLink]="['/book-detail', slide.bookId]"
+            style="cursor: pointer "
+            onError="this.src='../../../assets/images/brokenBook.jpg'"
+            (click)="checkC()"
+          />
+        </div>
+        <ng-template #default>
+          <img src="../../../assets/images/default-book.png" height="200px" />
+        </ng-template>
+        <!-- </div> -->
+      </div>
+    </ngx-slick-carousel>
+  </div>
+</section>
+
+<!-- <ng-template #noData>
+  <div class="no-data">
+    No Data Found
+  </div>
+</ng-template> -->
+
+<!-- <div class="flex-container flex-wrap">
+<div *ngFor="let book of ELEMENT_DATA">
+<mat-card class="example-card">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>{{book.title | shorten: 50: '...'}}</mat-card-title>
+      <mat-card-subtitle>{{book.author}}</mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image src="{{book.imagesUrl1}}" alt="">
+    <mat-card-content>
+      
+    </mat-card-content>
+    <mat-card-actions>
+     
+    </mat-card-actions>
+  </mat-card>
+</div>
+</div> -->
+
+<!-- <button (click)="addSlide()">Add</button>
+<button (click)="removeSlide()">Remove</button>
+<button (click)="slickModal.slickGoTo(2)">slickGoto 2</button>
+<button (click)="slickModal.unslick()">unslick</button> -->

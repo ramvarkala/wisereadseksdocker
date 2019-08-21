@@ -1,0 +1,159 @@
+<div class="split left">
+  <!-- <img mat-card-image src="./../../assets/images/Group.png" alt="Photo of a Shiba Inu"> -->
+
+  <p class="About-WiseReads">About WiseReads</p>
+  <div class="content-box">
+    <p class="content">
+      Wisereads is proud to introduce one of the most awaited and affordable
+      book rental platform for individuals, kids, students, and corporates
+      across the country. Wisereads Book Rental Library provides hassle-free
+      availability of books at a very affordable price.
+    </p>
+
+    <mat-card class="example-card">
+      <mat-card-header>
+        <mat-card-title class="bottom-contact">
+          <h5>Support</h5>
+          <div mat-card-avatar class="example-header-image"></div>
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="cnt-spt">
+          Call: +914029801891 <br />
+          Email: wisereads1@gmail.com
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<div class="split right">
+  <div class="centered">
+    <div class="wiseReads-box">
+      <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
+      <div class="login-heading">
+        <img
+          src="../../../assets/images/wiseReads.svg"
+          style="width: 230px;border-radius: 0PX;"
+        />
+        <p class="Login">Login</p>
+      </div>
+      <div class="form1">
+        <form [formGroup]="loginForm">
+          <!-- <div class="field1"> -->
+          <div class="mt-4">
+            <input
+              class="login-fields"
+              placeholder="User Name"
+              type="text"
+              name="email"
+              [(ngModel)]="user.email"
+              required
+              email
+              formControlName="email"
+              class="form-control"
+              autofocus
+            />
+
+            <!-- <div *ngIf="loginForm.controls['email'].errors && !loginForm.controls['email'].pristine" class="invalid-feedback">
+                            <div [hidden]="!loginForm.controls['email'].errors.required">Username is required</div>
+                      </div> -->
+            <div
+              *ngIf="
+                loginForm.controls['email'].invalid &&
+                (loginForm.controls['email'].dirty ||
+                  loginForm.controls['email'].touched)
+              "
+              class="alert-danger"
+            >
+              <div [hidden]="!loginForm.controls['email'].errors.required">
+                Username is required.
+              </div>
+              <div [hidden]="!loginForm.controls['email'].errors.email">
+                Enter valid username
+              </div>
+            </div>
+          </div>
+          <div class="mt-4">
+            <input
+              class="login-fields"
+              placeholder="Password"
+              type="password"
+              name="password"
+              [(ngModel)]="user.password"
+              required
+              formControlName="password"
+              class="form-control"
+            />
+            <!-- <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                            <div *ngIf="f.password.errors.required">Password is required</div>
+                      </div> -->
+
+            <div
+              *ngIf="
+                loginForm.controls['password'].invalid &&
+                (loginForm.controls['password'].dirty ||
+                  loginForm.controls['password'].touched)
+              "
+              class="alert-danger"
+            >
+              <div [hidden]="!loginForm.controls['password'].errors.required">
+                Password is required.
+              </div>
+            </div>
+          </div>
+          <div class="login-btn mt-4">
+            <!-- <a style="float:left" routerLink="/register">New user? Register here!</a> &nbsp; -->
+            <!-- <a routerLink="register">New user? Register here!</a> &nbsp; -->
+            <!-- <button  mat-raised-button (click)="signIn()" style="background-color: #2fc7f5 ;color: #ffffff">LOGIN <i class="fa fa-sign-in"></i></button> -->
+
+            <button
+              *ngIf="!loginForm.invalid"
+              [disabled]="loginForm.invalid"
+              mat-raised-button
+              (click)="signIn()"
+              style="background-color: #2fc7f5 ;color: #ffffff"
+            >
+              LOGIN <i class="fa fa-sign-in"></i>
+            </button>
+            <button
+              *ngIf="loginForm.invalid"
+              [disabled]="loginForm.invalid"
+              mat-raised-button
+              (click)="signIn()"
+              style="background-color: #c5ebf7 ;color: #ffffff"
+            >
+              LOGIN <i class="fa fa-sign-in"></i>
+            </button>
+          </div>
+          <!-- </div> -->
+          <a style="float:left;margin-top: 10px" routerLink="/register"
+            >New user? Register here!</a
+          >
+          &nbsp;
+        </form>
+      </div>
+    </div>
+    <!-- <div class="login-box">
+    <p class="Login">Login</p>
+</div>
+
+
+    <form class="" #LoginForm="ngForm">
+      <div class="field1">
+        <mat-form-field >
+            <input matInput placeholder="User Name" name="email" [(ngModel)]="user.email"
+                #email="ngModel" required autofocus>
+        </mat-form-field>
+        <mat-form-field >
+            <input matInput placeholder="Password" type="password" name="password"
+                [(ngModel)]="user.password" #password="ngModel" required>
+        </mat-form-field>
+      </div>
+    </form> -->
+
+    <!-- <button class="login-btn" [disabled]="!LoginForm.form.valid" mat-raised-button
+                                (click)="logIn()" color="primary">Sign In <i class="fal fa-sign-in"></i></button> -->
+  </div>
+</div>

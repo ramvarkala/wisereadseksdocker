@@ -1,0 +1,164 @@
+
+<section *ngIf="tableData.length > 0; else noData">
+  <div class="item2" fxFlex="50%">
+    <img class="dashboard-img" src="../../assets/images/metrics (1).png" />
+    <h1 *ngIf="id2==1" class="heading">To be Delivered</h1>
+    <h1 *ngIf="id2==2" class="heading">Delivered</h1>
+    <h1 *ngIf="id2==3" class="heading">Ready to Pickup</h1>
+    <h1 *ngIf="id2==4" class="heading">History</h1>
+    </div>
+  <div class="filter">
+      <input class="form-control" placeholder="Search..." type="text" name="search" [(ngModel)]="filter">      
+  </div>
+  <div class="table-responsive user-status-table">
+  <table class="table">
+    <thead> 
+      <tr>
+          <!-- <th class="text-center" style="width:7%" [class.active]="order === 'bookId'" (click)="setOrder('id')">
+            Book Id <span [hidden]="reverse">▼</span><span [hidden]="!reverse">▲</span>
+          </th> -->
+          <th class="text-center" style="width:7%" >
+              Book Id 
+            </th>
+          <th class="text-center" style="width:7%">Order Id</th>
+          <!-- <th style="width:23%"  [class.active]="order === 'title'" (click)="setOrder('title')"> 
+            Book Name <span [hidden]="reverse">▼</span><span [hidden]="!reverse">▲</span>
+          </th> -->
+          <th style="width:23%"  > 
+              Book Name 
+            </th>
+          <!-- <th style="width:12%" [class.active]="order === 'checkedOutDate'" (click)="setOrder('info.checkedOutDate')">
+            Checkout Date <span [hidden]="reverse">▼</span><span [hidden]="!reverse">▲</span>
+          </th> -->
+          <th style="width:12%">
+              Checkout Date 
+            </th>
+          <!-- <th style="width:12%" [class.active]="order === 'expReturnDate'" (click)="setOrder('info.expReturnDate')">
+            Due Date <span [hidden]="reverse">▼</span><span [hidden]="!reverse">▲</span>
+            
+          </th> -->
+          <th style="width:12%" >
+              Due Date 
+              
+            </th>
+          <!-- <th class="text-center" style="width:12%" [class.active]="order === 'rentPerDay'" (click)="setOrder('info.rentPerDay')">
+              Rent Per Day <span [hidden]="reverse">▼</span><span [hidden]="!reverse">▲</span>
+          </th> -->
+          <th class="text-center" style="width:12%" >
+              Rent Per Day
+          </th>
+          <th class="text-center" style="width:12%">Advance Paid</th>
+          <th class="text-center" *ngIf="id2 == 1 || id2 == 2">Due Amt</th>
+          <th class="text-center"  *ngIf="id2 == 4" style="width:8%">Checkin Date</th>
+          <th class="text-center"  *ngIf="id2 == 3 || id2 == 4" style="width:12%">Due Amt Paid</th>
+          <th *ngIf="id2 == 2" class="text-center">Action</th>
+          <!-- <th *ngIf="id2 == 3" class="text-center">Checkin Date</th> -->
+      </tr>
+    </thead>
+    <tbody >
+      <tr  *ngFor="let status of tableData | filter:filter | paginate: { itemsPerPage: 6, currentPage: p }; let i = index">
+        <td class="text-center">{{status.bookId}}</td>
+        <td class="text-center">{{status.orderId}}</td>
+        <td tooltip="{{status.title}}" placement="right" show-delay="500">
+          <a [routerLink]="['/book-detail', status.bookId]">
+              {{status.title | shorten: 50: '...'}}
+          </a>
+        </td>
+        <td>{{status.checkedOutDate | date}}</td>
+        <td>{{status.expReturnDate | date}}</td>
+        <td class="text-center">Rs.&nbsp;{{status.rentPerDay}}</td>
+        <td class="text-center">Rs.&nbsp;{{status.advancePaid}}</td>
+        <td class="text-center" *ngIf="id2 == 1 || id2 == 2">
+            <span  *ngIf="status.dueAmount != null;else blank">
+                Rs.&nbsp;{{status.dueAmount}}
+            </span>
+            <ng-template #blank>
+              <p>-</p>
+            </ng-template></td>
+            <!-- <td class="text-center" *ngIf="id2 == 3 || id2 == 4" >
+                <span  *ngIf="status.returnedDate != null;else blank">
+                    &nbsp;{{status.returnedDate | date}}
+                </span>
+                <ng-template #blank>
+                  <p>-</p>
+                </ng-template>
+              </td> -->
+              <td class="text-center" *ngIf="id2 == 4">{{status.returnedDate | date}}</td>
+
+        <td class="text-center" *ngIf="id2 == 3 || id2 == 4" >
+          <span  *ngIf="status.amountPaid != null;else blank">
+              Rs.&nbsp;{{status.amountPaid}}
+          </span>
+          <ng-template #blank>
+            <p>-</p>
+          </ng-template>
+        </td>
+        
+        <td class="text-center" *ngIf="id2 == 2">
+          <!-- <button type="submit" class="btn btn-primary" (click)="openDialog(i)">Checkin</button> -->
+          <button  class="checkout" class="btn btn-primary"  mat-button mat-raised-button (click)="openModal(template,i)">Checkin</button>
+
+        </td>
+
+       
+      </tr>
+    </tbody>
+   
+  </table>
+  <pagination-controls style="float: right" class="my-pagination" (pageChange)="p = $event"  maxSize="9"
+  directionLinks="true"
+  autoHide="true"
+  responsive="true"
+  previousLabel="Previous"
+  nextLabel="Next"
+  screenReaderPaginationLabel="Pagination"
+  screenReaderPageLabel="page"
+ ></pagination-controls>
+
+ </div>
+
+ <!-- <button  class="checkout" *ngIf="cobC=='true'"   mat-button mat-raised-button (click)="openModal(template)">CheckOut Now</button> -->
+ 
+ <ng-template #template>
+   <div class="modal-header">
+     <h4 class="modal-title pull-left">CheckIn</h4>
+     <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+       <span aria-hidden="true">&times;</span>
+     </button>
+   </div>
+   <div class="modal-body">
+     <div >
+         <div class="example-container">
+            <form name="myForm">
+
+            Total Amount : {{ dialog2Content?.totalAmount }} <br> Adv Paid :
+            {{ dialog2Content?.advancePaid }} <br> Due Amount : {{ dialog2Content?.dueAmount }}  
+
+  <br> <br>
+  <button class="checkout" class="btn"  style="float:right; background-color: #2fc7f5 ;color: #ffffff; margin-left: 5px" 
+  mat-button mat-raised-button color="primary" (click)="checkinbook()">
+      Checkin
+    </button>
+  <button class="btn" style="float:right;background-color: rgb(68, 66, 66) ;color: #ffffff" mat-button color="primary" (click)="modalRef.hide()"   >
+      Cancel
+    </button>
+    
+</form>
+           </div>
+   
+   </div>
+   </div>
+ </ng-template>
+
+
+
+
+</section>
+
+
+
+<ng-template #noData>
+  <div class="no-data">
+      No Data Found
+  </div>
+</ng-template>

@@ -1,0 +1,192 @@
+<!-- <section class="container-fluid" >
+    <div class="row">
+        <div class="item item-1 col-lg-3 col-md-3 col-sm-12">
+            <img class="dashboard-img" src="../../assets/images/methics (1).png">
+            <h1>Book List</h1>
+        </div>
+        <div *ngIf="isUser == 2 ||  isUser == 1" class="item item-2 col-lg-9 col-md-9 col-sm-12">
+            <div class="input-container">
+                <input type="file" id="real-input" (change)="onSelectFile($event)">
+            </div>
+            <button class="mr-2 action-button" (click)="onUpload()" mat-button mat-raised-button>Import Books</button>
+            <button class="action-button" routerLink="/add-book" mat-button mat-raised-button>Add Books</button>
+        </div>
+    </div>
+
+
+    <div class="example-container mat-elevation-z8">
+        <mat-table #table [dataSource]="dataSource" [class.isMobile]="isMobile">
+
+            <ng-container matColumnDef="bookid">
+                <mat-header-cell fxFlex="0 0 5%" *matHeaderCellDef> ID </mat-header-cell>
+                <mat-cell *matCellDef="let element" fxFlex="0 0 5%">
+                    <span class="mobile-label">Book ID:</span> {{element.bookId}}
+                </mat-cell>
+            </ng-container>
+
+
+            <ng-container matColumnDef="bookname">
+                <mat-header-cell *matHeaderCellDef [ngClass]="' bookname'"> Book Name </mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="' bookname'">
+                    <span class="mobile-label">Book Name:</span>
+                    <div  title="{{element.title }}">
+                            {{element.title  | shorten: 35: '...'  }}
+                        </div> 
+                </mat-cell>
+            </ng-container>
+
+
+            <ng-container matColumnDef="author">
+                <mat-header-cell *matHeaderCellDef> Author </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    <span class="mobile-label">Author:</span> {{element.author}}
+                </mat-cell>
+            </ng-container>
+
+
+            <ng-container matColumnDef="gnere">
+                <mat-header-cell *matHeaderCellDef fxFlex="0 0 10%"> Genre </mat-header-cell>
+                <mat-cell *matCellDef="let element" fxFlex="0 0 10%">
+                    <span class="mobile-label">Genre:</span> {{element.genre}}
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="publisher">
+                <mat-header-cell *matHeaderCellDef> Publisher </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    <span class="mobile-label">Publisher:</span> {{element.publisher}}
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="owner">
+                <mat-header-cell *matHeaderCellDef> Owner</mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    <span class="mobile-label">Owner:</span> <a href="mailto:{{element.owner}}">{{element.owner}}</a>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="action">
+                <mat-header-cell *matHeaderCellDef fxFlex="0 0 10%"> Actions </mat-header-cell>
+                <mat-cell *matCellDef="let element" fxFlex="0 0 10%">
+                    <span class="mobile-label">Actions:</span>
+                    <button class="edit-button" (click)="editBook(element.bookId)" mat-button mat-raised-button>Edit</button>
+                </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *mathowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+
+        <mat-paginator  [pageSize]="[10]" showFirstLastButtons></mat-paginator>
+    </div>
+
+</section> -->
+
+
+
+<section>
+        <div class="row">
+                <div class="item item-1 col-lg-3 col-md-3 col-sm-12">
+                    <img class="dashboard-img" src="../../../assets/images/metrics (1).png">
+                    <h1>Book List</h1>
+                </div>
+
+                <div class="item item-2 col-lg-9 col-md-9 col-sm-12" *ngIf="isUser == 2 ||  isUser == 1">
+                    <div class="input-container">
+                        <input type="file" id="real-input" (change)="onSelectFile($event)">
+                    </div>
+                    <button class="mr-2 action-button" (click)="onUpload()" mat-button mat-raised-button>Import Books</button>
+                    <button class="action-button" routerLink="/add-book" mat-button mat-raised-button>Add Books</button>
+                </div>
+                <div class="filter col-lg-9 col-md-9 col-sm-12" *ngIf="isUser == 3 ||  isUser == 4">
+                        <input class="form-control" placeholder="Search..." type="text" name="search" [(ngModel)]="filter">      
+                </div>
+            </div>
+  
+        <div class="table-responsive user-status-table mb-5">
+          <table class="table ">
+            <thead>
+                <tr>
+                    <th  style="width:6%" [class.active]="order === 'id'" (click)="setOrder('id')">
+                        Id <span [hidden]="reverse">▼</span><span [hidden]="!reverse">▲</span>
+                    </th>
+                    <th style="width:25%" [class.active]="order === 'title'" (click)="setOrder('title')"
+                        >Book Name <span [hidden]="reverse">▼</span><span [hidden]="!reverse">▲</span>
+                    </th>
+                    <th style="width:13%" [class.active]="order === 'author'" (click)="setOrder('author')">
+                        Author <span [hidden]="reverse">▼</span><span [hidden]="!reverse">▲</span>
+                    </th>
+                    <th  style="width:13%" [class.active]="order === 'genre'" (click)="setOrder('genre')">
+                        Genre <span [hidden]="reverse">▼</span><span [hidden]="!reverse">▲</span>
+                    </th>
+                    <th style="width:15%">Publisher</th>
+                    <th class="text-center" style="width:14%" [class.active]="order === 'owner'" (click)="setOrder('owner')"  *ngIf="isUser == 1 ||  isUser == 2">
+                            Owner <span [hidden]="reverse">▼</span><span [hidden]="!reverse">▲</span>
+                    </th>
+                    <th class="text-center" style="width:14%" [class.active]="order === 'availability'" (click)="setOrder('availability')" *ngIf="isUser == 3 ||  isUser == 4">
+                        Availability <span [hidden]="reverse">▼</span><span [hidden]="!reverse">▲</span>
+                    </th>
+                    <th class="text-center" [class.active]="order === 'rent'" (click)="setOrder('rent')" *ngIf="isUser == 3 ||  isUser == 4">
+                        Rental Value <span [hidden]="reverse">▼</span><span [hidden]="!reverse">▲</span>
+                    </th>
+                    <th class="text-center"  *ngIf="isUser == 1 ||  isUser == 2">
+                            Action 
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let data of ELEMENT_DATA | orderBy: order:reverse:'case-insensitive'  | filter:filter | paginate: { itemsPerPage: 8, currentPage: p }; let i = index">
+                    <td >{{data.bookId}}</td>
+                    <td tooltip="{{data.title}}" placement="right" show-delay="500">
+                            <a [routerLink]="['/book-detail', data.bookId]" (click)="checkC()">
+                                {{data.title | shorten: 50: '...'}}
+                            </a>
+                    </td>
+                    <td *ngIf="data.author != null; else nodata">{{data.author}}</td>
+                    <td *ngIf="data.genre != null; else nodata">{{data.genre}}</td>
+                    <td *ngIf="data.publisher != null; else nodata">{{data.publisher}}</td>
+                    <td class="text-center" *ngIf="isUser == 3 ||  isUser == 4" >
+                        <ng-container  *ngIf="data.availability != null; else nodata" >
+                            <!-- <span *ngIf="data.availabilityId==0">No</span>
+                            <span *ngIf="data.availabilityId==1">Yes</span>                 -->
+                            <!-- {{data.availability}} -->
+                        </ng-container>
+                    </td>
+                    <td class="text-center"  *ngIf="isUser == 1 ||  isUser == 2" >
+                            <ng-container  *ngIf="data.owner != null; else nodata">                                   
+                                    <ng-template #OwnerrContent>
+                                             Phone: <b> {{data.ownerContactNumber}}</b> <br> Email:<b> {{data.owner}}</b>
+                                          </ng-template>
+                                           
+                                          <span [tooltip]="OwnerrContent" placement="right" show-delay="500" offset="4" content-type="template" >
+                                              <a>  {{data.ownerFirstName}} {{data.ownerLastName}} </a>
+                                          </span>
+                            </ng-container>
+
+                            
+                    </td>
+                    <ng-template #nodata>
+                        <p class="text-center"> - </p>
+                    </ng-template>
+                    <td class="text-center" *ngIf="isUser == 3 ||  isUser == 4">{{data.rentPerDay}}</td>
+                    <td class="text-center"  *ngIf="isUser == 1 ||  isUser == 2">
+                            <button class="edit-button" (click)="editBook(data.bookId)" mat-button mat-raised-button>Edit</button>
+                    </td>
+                </tr>
+            </tbody>
+          </table>
+          <pagination-controls style="float: right" class="my-pagination" (pageChange)="p = $event"  maxSize="9"
+                                directionLinks="true"
+                                autoHide="true"
+                                responsive="true"
+                                previousLabel="Previous"
+                                nextLabel="Next"
+                                screenReaderPaginationLabel="Pagination"
+                                screenReaderPageLabel="page"
+         ></pagination-controls>
+        </div>
+  </section>
+
+
+
+

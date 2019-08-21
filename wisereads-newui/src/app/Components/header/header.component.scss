@@ -1,0 +1,78 @@
+input:focus, textarea:focus, select:focus{
+  outline: none;
+}
+.header-section {
+  display: flex;
+  background-color: #fff;
+  width: 100%;
+  z-index: 9;
+  box-shadow: 0 0 3px #000;
+  position: fixed;
+  height: 69px;
+  // background-color: papayawhip;
+  .wisereads-logo {
+    display: flex;
+  }
+  .fa-sign-in {
+    color: #0b4f82;
+  }
+  .link-section {
+    margin-top: 8px;
+    padding: 3vh;
+  }
+  a {
+    padding: 10px;
+    font-size: 18px;
+    color: #0b4f82;
+  }
+}
+
+.wisereads-logo {
+  img {
+    padding: 10px 0 10px 50px;
+    width: 300px;
+    height: inherit !important;
+  }
+}
+
+.alignSearch {
+  padding-top: 14px;
+}
+.search-bar {
+ position: relative;
+ 
+.fa {
+  font-size: 18px;
+  font-weight: 300;
+  color: #4b4b4b;
+  right: 14px;
+  position: absolute;
+  top: 7px;
+}
+}
+
+.search-input {
+  border: none;
+  width: 400px;
+  margin-left: 10px;
+  font-size: 16px;
+  padding: 8px 20px;
+  font-weight: 300;
+  color: #9f9f9f;
+  border-radius: 20px;
+  background-color: #efefef;
+}
+
+
+.fa-search {
+  font-size: 25px;
+  color: #9f9f9f;
+  padding-left: 6px;
+  padding-top: 4px;
+}
+
+
+.search-bar-set{
+  margin-left: auto;
+  margin-right: auto;
+}
