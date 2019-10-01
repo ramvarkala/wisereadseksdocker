@@ -1,13 +1,8 @@
-#FROM httpd:latest
-#COPY ./dist/WiseReads/* /usr/local/apache2/htdocs/
-#EXPOSE 80
-
-FROM ubuntu:latest
-RUN apt-get update
-RUN apt-get install apache2 -y
+FROM php:7.0-apache
 COPY ./dist/WiseReads/* /var/www/html/
-RUN a2enmod rewrite
-COPY ./.htaccess /var/www/html/
-COPY ./apache2.conf /etc/apache2/
+ADD ./dist/WiseReads/assets /var/www/html/assets
+#RUN mkdir /var/www/html/assets
+#COPY ./dist/WiseReads/assets/* /var/www/html/assets/
 EXPOSE 80
-CMD apachectl -D FOREGROUND
+COPY ./apache2.conf  /etc/apache2/
+CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]

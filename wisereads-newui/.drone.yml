@@ -1,5 +1,12 @@
-image: node:latest
-script:
- - npm install
- - ng build
- - ls  
+kind: pipeline
+type: docker
+name: dafault
+steps:
+- name: builing_ui
+  image: node
+  commands:
+    - ls
+    - npm install -g @angular/cli
+    - npm install
+    - ng build
+    - ls
